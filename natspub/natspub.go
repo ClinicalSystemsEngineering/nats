@@ -14,9 +14,7 @@
 package natspub
 
 import (
-	"fmt"
 	"log"
-	"os"
 	"strings"
 	"sync"
 	"time"
@@ -24,7 +22,7 @@ import (
 	"github.com/nats-io/go-nats-streaming"
 )
 
-var usageStr = `
+/* var usageStr = `
 Usage: stan-pub [options] <subject> <message>
 
 Options:
@@ -32,15 +30,15 @@ Options:
 	-c, --cluster  <cluster name>   NATS Streaming cluster name
 	-id,--clientid <client ID>      NATS Streaming client ID
 	-a, --async                     Asynchronous publish mode
-`
+` */
 
 // NOTE: Use tls scheme for TLS, e.g. stan-pub -s tls://demo.nats.io:4443 foo hello
-func usage() {
+/* func usage() {
 	fmt.Printf("%s\n", usageStr)
 	os.Exit(0)
-}
+} */
 
-//Pubber is a modiication of the go nats client example to pass messages from msgchan to the nats url
+//Pubber is a modiication of the go nats publish client example to pass messages from msgchan to the nats url
 func Pubber(clusterID string, clientID string, async bool, URL string, msgchan chan string, subj string) {
 
 	sc, err := stan.Connect(clusterID, clientID, stan.NatsURL(URL))
@@ -71,6 +69,7 @@ func Pubber(clusterID string, clientID string, async bool, URL string, msgchan c
 				splitmsg := strings.Split(msg, ";")
 				_, text := splitmsg[0], splitmsg[1]
 				if !async {
+
 					err = sc.Publish(subj, []byte(text))
 					if err != nil {
 						log.Fatalf("Error during publish: %v\n", err)
