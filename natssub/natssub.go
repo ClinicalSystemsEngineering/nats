@@ -49,12 +49,13 @@ func usage() {
 }
 */
 
-func printMsg(m *stan.Msg) {
-	log.Printf("Received on [%s]: '%s'\n", m.Subject, m)
-}
+//func printMsg(m *stan.Msg) {
+//log.Printf("Received on [%s]: '%s'\n", m.Subject, m)
+
+//}
 
 //Subber implements the nats.io example sub go clien
-func Subber(clusterID string, clientID string, showTime bool, startSeq uint64, startDelta string, deliverAll bool, deliverLast bool, durable string, qgroup string, unsubscribe bool, URL string, subj string) {
+func Subber(clusterID string, clientID string, showTime bool, startSeq uint64, startDelta string, deliverAll bool, deliverLast bool, durable string, qgroup string, unsubscribe bool, URL string, subj string, msgchan chan string) {
 
 	//	defaultID := fmt.Sprintf("client.%s", nuid.Next())
 	/*
@@ -101,7 +102,8 @@ func Subber(clusterID string, clientID string, showTime bool, startSeq uint64, s
 	//subj, i := args[0], 0
 
 	mcb := func(msg *stan.Msg) {
-		printMsg(msg)
+		//printMsg(msg)
+		msgchan <- string(msg.Data)
 	}
 
 	startOpt := stan.StartAt(pb.StartPosition_NewOnly)
